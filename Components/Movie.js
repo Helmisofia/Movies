@@ -59,6 +59,12 @@ export default function Movie(props) {
         Alert.alert('Your rating was ' + { rating })
     }
 
+    // const dataMissing = () => {
+    //     if (movie.Metascore != 'N/A') {
+            
+    //     }
+    // }
+
     return (
         <ScrollView style={[styles.container]}>
             <View style={{ flexDirection: 'row', borderColor: 'grey' }}>

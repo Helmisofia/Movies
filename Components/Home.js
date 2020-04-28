@@ -49,8 +49,8 @@ export default function Home(props) {
     }
 
     return (
-        <ScrollView style={[styles.container]}>
-            <View>
+        <ScrollView style={[styles.container]} >
+            <View >
                 <Text style={[styles.header]}>Search</Text>
                 <View style={[styles.searchbarcontainer]}>
 
@@ -132,8 +132,8 @@ Home.navigationOptions = ({ navigate }) => ({ title: 'Home' });
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FCFCFC',
-        flex: 1
+        flex: 1,
+        backgroundColor: '#FCFCFC'
     },
     header: {
         fontSize: 16,

@@ -18,7 +18,7 @@ export default function Map(props) {
     }, []);
 
     const getLocation = () => {
-        const url = 'http://www.mapquestapi.com/geocoding/v1/address?key=fnKX4MMwm8IwDlHmxvqTwwa7EzHVzig3&location=' + params.country;
+        const url = 'http://www.mapquestapi.com/geocoding/v1/address?key=fnKX4MMwm8IwDlHmxvqTwwa7EzHVzig3&location=sweden';
         fetch(url)
             .then((response) => response.json())
             .then((responseJson) => {
