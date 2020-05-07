@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, Input, Button, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native';
-import * as Location from 'expo-location';
+import React, {useEffect, useState} from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function Map(props) {
-
-    const [address, setAddress] = useState(params.country);
+    const { params } = props.navigation.state;
     const [lat, setLat] = useState(lat);
     const [lng, setLng] = useState(lng);
-    const [addressess, setAddressess] = useState('');
-    const { navigate } = props.navigation;
-    const { params } = props.navigation.state;
+
+    console.disableYellowBox = true;
 
     useEffect(() => {
         getLocation();
-    }, []);
+    }, [])
 
     const getLocation = () => {
-        const url = 'http://www.mapquestapi.com/geocoding/v1/address?key=fnKX4MMwm8IwDlHmxvqTwwa7EzHVzig3&location=sweden';
+        const url = 'http://www.mapquestapi.com/geocoding/v1/address?key=fnKX4MMwm8IwDlHmxvqTwwa7EzHVzig3&location=' + params.movie.Country;
         fetch(url)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -28,10 +24,8 @@ export default function Map(props) {
             .catch((error) => {
                 Alert.alert('Error', error);
             });
-        setAddress(address);
-        setAddressess([...addressess, address]);
-        setAddress();
     }
+
 
     Map.navigationOptions = ({ navigate }) => ({ title: 'Map' });
 
@@ -50,7 +44,7 @@ export default function Map(props) {
                             latitude: lat,
                             longitude: lng
                         }}
-                        title={address} />
+                        title={'Country'} />
                 </MapView>
             </View>
 
@@ -63,29 +57,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#FCFCFC',
         flex: 1
-    },
-    searchbarcontainer: {
-        marginTop: 10,
-        alignSelf: 'center',
-    },
-    searchbar: {
-        flexDirection: 'row',
-        marginTop: 10,
-        backgroundColor: '#F0F0F0',
-        borderRadius: 6,
-        height: 40,
-        marginBottom: 15,
-
-    },
-    textinput: {
-        width: '80%',
-        marginLeft: 10
-
-    },
-    icon: {
-        color: 'grey',
-        marginLeft: 10,
-        marginTop: 10
     },
 
 });

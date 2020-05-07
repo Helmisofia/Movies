@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView, TouchableOpacity, Button, TextInput, Alert } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Carousel from 'react-native-snap-carousel';
 
 export default function Home(props) {
     navigationOptions = { title: 'Home', };
@@ -9,9 +9,8 @@ export default function Home(props) {
     const [title, setTitle] = useState('');
     const [movies, setMovies] = useState([]);
     const [series, setSeries] = useState([]);
-    const { params } = props.navigation.state;
-    const [popular, setPopular] = useState([{ name: 'testi', year: '2009', rating: '8' }, { name: 'testi2', year: '2019', rating: '9' }]);
-    const [movieType, setMovieType] = useState('movie')
+
+    console.disableYellowBox = true;
 
     const getMovies = () => {
         const url = 'http://www.omdbapi.com/?apikey=3066df7&s=' + title + '&type=movie';
@@ -50,84 +49,67 @@ export default function Home(props) {
 
     return (
         <ScrollView style={[styles.container]} >
-            <View >
-                <Text style={[styles.header]}>Search</Text>
-                <View style={[styles.searchbarcontainer]}>
-
-                    <View style={[styles.searchbar]}>
-                        <TouchableOpacity onPress={getMovies} >
-                            <Ionicons name="ios-search" size={20} style={[styles.icon]} />
-                        </TouchableOpacity>
-                        <TextInput
-                            style={[styles.textinput]}
-                            clearButtonMode={"always"}
-                            placeholder={'Type movie name'}
-                            onChangeText={title => setTitle(title)}
-                            value={title}>
-                        </TextInput>
-                    </View>
-                </View>
-                <Text style={[styles.header]}>Movies</Text>
-                <FlatList
-                    style={{ marginLeft: "5%" }}
-                    horizontal={true}
-                    keyExtractor={item => item}
-                    renderItem={({ item }) => <TouchableOpacity style={[styles.border]}
-                        onPress={() => navigate('Movie', { item })}
-                    >
-                        <Text>{item.Title}</Text>
-                        <Image style={{ width: '100%', height: '100%' }} source={{ uri: item.Poster }} />
-
-                    </TouchableOpacity>
-                    }
-                    data={movies}
-                />
-                <Text style={[styles.header]}>Series</Text>
-                <FlatList
-                    style={{ marginLeft: "5%" }}
-                    horizontal={true}
-                    keyExtractor={item => item}
-                    renderItem={({ item }) => <TouchableOpacity style={[styles.border]}
-                        onPress={() => navigate('Movie', { item })}
-                    >
-                        <Text>{item.Title}</Text>
-                        <Image style={{ width: '100%', height: '100%' }} source={{ uri: item.Poster }} />
-
-                    </TouchableOpacity>
-                    }
-                    data={series}
-                />
+            <Text style={[styles.header]}>Search</Text>
+            <View style={[styles.searchbar]}>
+                <TouchableOpacity onPress={getMovies} >
+                    <Ionicons name="ios-search" size={20} style={[styles.icon]} />
+                </TouchableOpacity>
+                <TextInput
+                    style={[styles.textinput]}
+                    clearButtonMode={"always"}
+                    placeholder={'Type a title'}
+                    onChangeText={title => setTitle(title)}
+                    value={title}>
+                </TextInput>
             </View>
-            {/*             
-            <Text style={[styles.header]}>Search movies by country</Text>
-            <TouchableOpacity
-                onPress={() => navigate('Map')}
-            >
-                <Image style={{ width: 200, height: 200, alignSelf: 'center', marginTop: 20 }} source={require('./globe.png')} />
-            </TouchableOpacity> */}
-            {/* <View>
-                <Text style={[styles.header]}>Popular</Text>
-                <FlatList
-                    style={{ marginLeft: "5%" }}
-                    horizontal={true}
-                    keyExtractor={item => item}
-                    renderItem={({ item }) => <TouchableOpacity style={{}}
-                        onPress={() => navigate('Movie', { item })}
-                    >
-                        <Text>{item.name}</Text>
-                        <Text>{item.rating}</Text>
-                        <Text>{item.year}</Text>
-                        <Image style={{ width: '100%', height: '100%' }} source={{ uri: item.Poster }} />
 
-                    </TouchableOpacity>
-                    }
-                    data={popular}
-                />
-            </View> */}
+            <Text style={[styles.header]}>Movies</Text>
+            <Carousel
+                style={{ alignSelf: 'center' }}
+                sliderWidth={400}
+                itemWidth={200}
+                enableSnap={false}
+                horizontal={true}
+                layout={'stack'}
+                layoutCardOffset={`18`}
+                keyExtractor={item => item}
+                renderItem={({ item }) => <TouchableOpacity style={[styles.border]}
+                    onPress={() => navigate('Movie', { item })}
+                >
+                    <Image style={[styles.image]} source={{ uri: item.Poster }} />
+                    <Text style={[styles.itemtitle]}>{item.Title}</Text>
+                    <Text style={[styles.itemyear]}>{item.Year}</Text>
+
+                </TouchableOpacity>
+                }
+                data={movies}
+            />
+            <Text style={[styles.header]}>Series</Text>
+            <Carousel
+                style={{ alignSelf: 'center' }}
+                sliderWidth={400}
+                itemWidth={200}
+                enableSnap={false}
+                layout={'stack'}
+                layoutCardOffset={`18`}
+                style={{ marginLeft: "5%" }}
+                horizontal={true}
+                keyExtractor={item => item}
+                renderItem={({ item }) => <TouchableOpacity style={[styles.border]}
+                    onPress={() => navigate('Movie', { item })}
+                >
+                    <Image style={[styles.image]} source={{ uri: item.Poster }} />
+                    <Text style={[styles.itemtitle]}>{item.Title}</Text>
+                    <Text style={[styles.itemyear]}>{item.Year}</Text>
+
+                </TouchableOpacity>
+                }
+                data={series}
+            />
+
         </ScrollView>
     );
 };
-
 Home.navigationOptions = ({ navigate }) => ({ title: 'Home' });
 
 const styles = StyleSheet.create({
@@ -136,33 +118,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#FCFCFC'
     },
     header: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '600',
         marginLeft: 15,
         marginTop: 15,
         color: '#48a4f0',
         marginBottom: 15
     },
-    searchbarcontainer: {
-        backgroundColor: '#FCFCFC',
-        marginTop: 28,
-        alignSelf: 'center',
-        marginBottom: 15
-
-    },
     searchbar: {
         flexDirection: 'row',
         marginTop: 10,
         backgroundColor: '#F0F0F0',
         borderRadius: 6,
-        width: '95%',
+        width: '80%',
         height: 40,
-        marginBottom: 15
+        marginBottom: 15,
+        alignSelf: 'center'
 
     },
     textinput: {
-        width: '80%',
+        width: '85%',
         marginLeft: 10
+
 
     },
     icon: {
@@ -177,11 +154,27 @@ const styles = StyleSheet.create({
             height: 2,
             width: 2
         },
-        marginRight: 3,
-        marginLeft: 3,
         backgroundColor: 'white',
-        height: 150,
-        width: 150,
-        alignItems: 'center'
+        height: 300,
+        width: 200,
+        alignItems: 'center',
+        borderRadius: 10,
+        marginBottom: 20
+    },
+    image: {
+        width: '100%',
+        height: '80%',
+        borderRadius: 10
+    },
+    itemtitle: {
+        fontSize: 16,
+        marginTop: 5,
+        fontWeight: '600',
+        marginLeft: 5,
+        marginRight: 5
+    },
+    itemyear: {
+        fontSize: 14,
+        fontStyle: 'italic'
     },
 });
