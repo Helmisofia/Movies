@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView, TextInput, Button, TouchableOpacity, Alert } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import ProgressCircle from 'react-native-progress-circle';
-import { StackedBarChart } from 'react-native-chart-kit';
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 import * as Animatable from 'react-native-animatable';
 
 export default function Movie(props) {
@@ -14,6 +12,8 @@ export default function Movie(props) {
     const [title, setTitle] = useState(params.item.Title);
     const [year, setYear] = useState(params.item.Year);
     const [rating, setRating] = useState(rating);
+
+    console.disableYellowBox = true;
 
     const url = 'http://www.omdbapi.com/?apikey=3066df7&i=' + params.item.imdbID;
     fetch(url)
@@ -32,71 +32,70 @@ export default function Movie(props) {
 
     return (
         <ScrollView style={[styles.container]}>
-            <View style={{ flexDirection: 'row', borderColor: 'grey' }}>
-
-                <Image style={{ width: 150, height: 150, marginLeft: 15, marginTop: 15 }} source={{ uri: params.item.Poster }} />
-                <View style={{ marginLeft: 20, marginTop: 40 }}>
+            <View style={[styles.top]}>
+                <Image style={[styles.poster]} source={{ uri: params.item.Poster }} />
+                <View style={[styles.toptexts]}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 12, fontStyle: 'italic' }}>{movie.Type}</Text>
-                        <Text style={{ fontSize: 12, fontStyle: 'italic', marginLeft: 15, color: 'darkblue', width: 150 }}>({movie.Language})</Text>
+                        <Text style={[styles.type]}>{movie.Type}</Text>
+                        <Text style={[styles.language]}>({movie.Language})</Text>
                     </View>
-                    <Text style={{ width: 150, fontSize: 16, fontWeight: 'bold' }}>{params.item.Title}</Text>
-                    <Text style={{ marginTop: 5, fontSize: 14, fontStyle: 'italic' }}>{params.item.Year}</Text>
+                    <Text style={[styles.title]}>{params.item.Title}</Text>
+                    <Text style={[styles.year]}>{params.item.Year}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity onPress={() => navigate('Favourites', { title, year, rating })}>
-                            <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={{ fontSize: 30, marginTop: 5, marginLeft: 10 }}>❤️</Animatable.Text>
+                            <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={[styles.animation]}>❤️</Animatable.Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             onPress={() => navigate('Map', { movie })}
                         >
-                            <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={{ fontSize: 30, marginTop: 5, marginLeft: 10 }}>🌍</Animatable.Text>
+                            <Animatable.Text animation="pulse" easing="ease-out" iterationCount="infinite" style={[styles.animation]}>🌍</Animatable.Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
-            <View style={{ backgroundColor: 'white', height: 600, borderTopLeftRadius: 20, borderTopEndRadius: 20, marginTop: 15 }}>
+            <View style={[styles.middle]}>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={[styles.smallcontainer]}>
-                        <Image style={{ height: 20, width: 20, marginLeft: 10 }} source={require('../Images/clock.png')} />
-                        <Text style={{ marginLeft: 10 }}>{movie.Runtime}</Text>
+                        <Image style={[styles.middleimage]} source={require('../Images/clock.png')} />
+                        <Text style={[styles.middletext]}>{movie.Runtime}</Text>
                     </View>
                     <View style={[styles.smallcontainer]}>
-                        <Image style={{ height: 20, width: 20, marginLeft: 10 }} source={require('../Images/director.png')} />
-                        <Text style={{ marginLeft: 10, width: 100 }}>{movie.Director}</Text>
+                        <Image style={[styles.middleimage]} source={require('../Images/director.png')} />
+                        <Text style={[styles.middletext]}>{movie.Director}</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={[styles.smallcontainer]}>
-                        <Image style={{ height: 20, width: 20, marginLeft: 10 }} source={require('../Images/country.png')} />
-                        <Text style={{ marginLeft: 10, width: 100 }}>{movie.Country}</Text>
+                        <Image style={[styles.middleimage]} source={require('../Images/country.png')} />
+                        <Text style={[styles.middletext]}>{movie.Country}</Text>
                     </View>
                     <View style={[styles.smallcontainer]}>
-                        <Image style={{ height: 20, width: 20, marginLeft: 10 }} source={require('../Images/star.png')} />
+                        <Image style={[styles.middleimage]} source={require('../Images/star.png')} />
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ marginLeft: 10 }}>{movie.imdbRating} </Text>
-                            <Text style={{ fontSize: 12, fontStyle: 'italic', color: 'grey', marginTop: 1 }}>(imdbRating)</Text>
+                            <Text style={{marginLeft: 10}}>{movie.imdbRating} </Text>
+                            <Text style={[styles.imdbrating]}>(imdbRating)</Text>
                         </View>
 
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginLeft: 20, marginRight: 20, marginTop: 10 }}>
-                    <Image style={{ height: 40, width: 40, marginLeft: 10 }} source={require('../Images/award.png')} />
-                    <Text style={{ marginLeft: 10, width: 250 }}>{movie.Awards}</Text>
+                <View style={[styles.infoview]}>
+                    <Image style={[styles.infoimage]} source={require('../Images/award.png')} />
+                    <Text style={[styles.infotext]}>{movie.Awards}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginLeft: 20, marginRight: 20, marginTop: 10 }}>
-                    <Image style={{ height: 40, width: 40, marginLeft: 10 }} source={require('../Images/actors.png')} />
-                    <Text style={{ marginLeft: 10, width: 250 }}>{movie.Actors}</Text>
+                <View style={[styles.infoview]}>
+                    <Image style={[styles.infoimage]} source={require('../Images/actors.png')} />
+                    <Text style={[styles.infotext]}>{movie.Actors}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginLeft: 20, marginRight: 20, marginTop: 10 }}>
-                    <Image style={{ height: 40, width: 40, marginLeft: 10 }} source={require('../Images/genre.png')} />
-                    <Text style={{ marginLeft: 10, width: 250, marginTop: 10 }}>{movie.Genre}</Text>
+                <View style={[styles.infoview]}>
+                    <Image style={[styles.infoimage]} source={require('../Images/genre.png')} />
+                    <Text style={[styles.infotext]}>{movie.Genre}</Text>
                 </View>
-                <Text style={{ marginLeft: 20, marginRight: 20, marginTop: 20, marginBottom: 20, fontSize: 14, fontStyle: 'italic' }}>{movie.Plot}</Text>
+                <Text style={[styles.plot]}>{movie.Plot}</Text>
 
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ marginLeft: 30 }}>
-                        <Text style={{ fontSize: 16, fontStyle: 'italic', marginLeft: 5, marginTop: 20 }}>Metacritic</Text>
+                        <Text style={[styles.metacritic]}>Metacritic</Text>
                         <ProgressCircle
                             percent={(movie.Metascore)}
                             radius={50}
@@ -112,7 +111,7 @@ export default function Movie(props) {
 
                     </View>
                     <View style={{ marginLeft: 30, marginTop: 20 }}>
-                        <Text style={{ fontSize: 16, fontStyle: 'italic', marginLeft: 50, marginBottom: 20 }}>My rating</Text>
+                        <Text style={[styles.myrating]}>My rating</Text>
                         <AirbnbRating
                             count={5}
                             reviews={["Terrible", "Bad", "OK", "Good", "Best!"]}
@@ -164,4 +163,102 @@ const styles = StyleSheet.create({
         marginTop: 15,
         color: 'grey'
     },
+    top: { 
+        flexDirection: 'row', 
+        borderColor: 'grey' 
+    },
+    poster: { 
+        width: 150, 
+        height: 150, 
+        marginLeft: 15, 
+        marginTop: 15 
+    },
+    toptexts: {
+        marginLeft: 20, 
+        marginTop: 40 
+    },
+    type: {
+        fontSize: 12, 
+        fontStyle: 'italic' 
+    },
+    language: { 
+        fontSize: 12, 
+        fontStyle: 'italic', 
+        marginLeft: 15, 
+        color: 'darkblue', 
+        width: 150 
+    },
+    title: {
+        width: 150, 
+        fontSize: 16, 
+        fontWeight: 'bold' 
+    },
+    year: { 
+        marginTop: 5, 
+        fontSize: 14, 
+        fontStyle: 'italic' 
+    },
+    animation: { 
+        fontSize: 30, 
+        marginTop: 5, 
+        marginLeft: 10 
+    },
+    middle: { 
+        backgroundColor: 'white', 
+        height: 600, 
+        borderTopLeftRadius: 20, 
+        borderTopEndRadius: 20, 
+        marginTop: 15 
+    },
+    middleimage: { 
+        height: 20, 
+        width: 20, 
+        marginLeft: 10 
+    },
+    middletext: { 
+        marginLeft: 10, 
+        width: 150 
+    },
+    imdbrating: { 
+        fontSize: 12, 
+        fontStyle: 'italic', 
+        color: 'grey', 
+        marginTop: 1 
+    },
+    infoview: { 
+        flexDirection: 'row', 
+        marginLeft: 20, 
+        marginRight: 20, 
+        marginTop: 10 
+    },
+    infoimage: { 
+        height: 40, 
+        width: 40, 
+        marginLeft: 10 
+    },
+    infotext: { 
+        marginLeft: 10, 
+        width: 250, 
+        marginTop: 10 
+    },
+    plot: { 
+        marginLeft: 20, 
+        marginRight: 20, 
+        marginTop: 20, 
+        marginBottom: 20, 
+        fontSize: 14, 
+        fontStyle: 'italic' 
+    },
+    metacritic: { 
+        fontSize: 16, 
+        fontStyle: 'italic', 
+        marginLeft: 5, 
+        marginTop: 20 
+    },
+    myrating: { 
+        fontSize: 16, 
+        fontStyle: 'italic', 
+        marginLeft: 50, 
+        marginBottom: 20 
+    }
 });

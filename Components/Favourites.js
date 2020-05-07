@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, Input, Button, KeyboardAvoidingView, TextInput, Alert } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Updates } from 'expo';
-import { Rating, AirbnbRating } from 'react-native-ratings';
 
 const db = SQLite.openDatabase('movielistdb.db');
 
 export default function Favourites(props) {
     navigationOptions = { title: 'Favourites', };
-    const { navigate } = props.navigation;
     const { params } = props.navigation.state;
     const [movielist, setMovielist] = useState([]);
+
+    console.disableYellowBox = true;
 
     useEffect(() => {
         saveItem();
@@ -55,12 +54,12 @@ export default function Favourites(props) {
                 renderItem={({ item }) =>
                     <View style={[styles.border]}>
                         <TouchableOpacity onPress={() => deleteItem(item.id)}>
-                            <Image style={{ width: 50, height: 50, marginLeft: 5 }} source={require('../Images/delete.png')} />
+                            <Image style={[styles.image]} source={require('../Images/delete.png')} />
                         </TouchableOpacity>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{ marginLeft: 15 }}>
-                                <Text style={{ fontSize: 18, fontWeight: '600', width: 170 }}>{item.title} </Text>
-                                <Text style={{ fontSize: 16, fontStyle: 'italic' }}>{item.year} </Text>
+                                <Text style={[styles.title]}>{item.title} </Text>
+                                <Text style={[styles.year]}>{item.year} </Text>
                             </View>
                             {/* <AirbnbRating
                                 count={5}
@@ -101,6 +100,19 @@ const styles = StyleSheet.create({
         marginTop: 10,
         height: 70,
         alignItems: 'center'
-
     },
+    image: {
+        width: 50,
+        height: 50,
+        marginLeft: 5
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: '600',
+        width: 170
+    },
+    year: {
+        fontSize: 16,
+        fontStyle: 'italic'
+    }
 });

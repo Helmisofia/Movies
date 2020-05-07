@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { View, StyleSheet, Button, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 export default function Map(props) {
-    const { navigate } = props.navigation;
     const { params } = props.navigation.state;
     const [lat, setLat] = useState(lat);
     const [lng, setLng] = useState(lng);
+
+    console.disableYellowBox = true;
 
     useEffect(() => {
         getLocation();
