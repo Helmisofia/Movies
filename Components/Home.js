@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Carousel from 'react-native-snap-carousel';
+import { Button, Overlay } from 'react-native-elements';
 
 export default function Home(props) {
     navigationOptions = { title: 'Home', };
@@ -9,8 +10,13 @@ export default function Home(props) {
     const [title, setTitle] = useState('');
     const [movies, setMovies] = useState([]);
     const [series, setSeries] = useState([]);
+    const [visible, setVisible] = useState(false);
 
     console.disableYellowBox = true;
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
 
     const getMovies = () => {
         const url = 'http://www.omdbapi.com/?apikey=3066df7&s=' + title + '&type=movie';
@@ -49,6 +55,11 @@ export default function Home(props) {
 
     return (
         <ScrollView style={[styles.container]} >
+            <Button title="Show info" onPress={toggleOverlay} />
+            <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text style={[styles.header]}>Hello!</Text>
+                <Text style={[styles.info]}>This app is for searching movies and series by title. You can see data from movies and series and add them to your favourites. There's also a map that pins down the origin country of the movie or series. {"\n"}{"\n"}{"\n"}Have fun!</Text>
+            </Overlay>
             <Text style={[styles.header]}>Search</Text>
             <View style={[styles.searchbar]}>
                 <TouchableOpacity onPress={getMovies} >
@@ -174,6 +185,14 @@ const styles = StyleSheet.create({
         marginRight: 5
     },
     itemyear: {
+        fontSize: 14,
+        fontStyle: 'italic'
+    },
+    info: {
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        marginBottom: 20,
         fontSize: 14,
         fontStyle: 'italic'
     },

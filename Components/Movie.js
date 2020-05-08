@@ -28,6 +28,7 @@ export default function Movie(props) {
     const saveRating = (rating) => {
         console.log(rating);
         setRating(rating);
+        Alert.alert('Your rating is ' + rating);
     }
 
     return (
