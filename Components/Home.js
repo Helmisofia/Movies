@@ -103,7 +103,6 @@ export default function Home(props) {
                 enableSnap={false}
                 layout={'stack'}
                 layoutCardOffset={`18`}
-                style={{ marginLeft: "5%" }}
                 horizontal={true}
                 keyExtractor={item => item}
                 renderItem={({ item }) => <TouchableOpacity style={[styles.border]}
